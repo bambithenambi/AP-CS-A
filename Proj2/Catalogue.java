@@ -71,22 +71,22 @@ class Catalogue {
     ArrayList<Book> res = new ArrayList<Book>();
     for(Book b: this.books) {
       if(category==1){
-        if(b.title.equals(query)){
+        if(b.getTitle().equals(query)){
           res.add(b);
         }
       }
       else if (category==2){
-        if(b.author.equals(query)){
+        if(b.getAuthor().equals(query)){
           res.add(b);
         }
       }
       else if (category==3){
-        if(b.genre.equals(query)){
+        if(b.getGenre().equals(query)){
           res.add(b);
         }
       }
       else if (category==4){
-        if(b.ISBN.equals(query)){
+        if(b.getISBN().equals(query)){
           res.add(b);
         }
       }
@@ -114,7 +114,11 @@ class Catalogue {
    */
   public int getBookCount(Book book)
   {
-    return 0; // replace this line
+    ArrayList<Book> res = findBook(4, book.getISBN());
+    if (res.isEmpty()) {
+      return -1;
+    }
+    return bookCounts.get(books.indexOf(res.get(0)));
   }
   
   /* Write this function (Phase I)

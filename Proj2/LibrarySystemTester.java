@@ -232,18 +232,31 @@ class LibrarySystemTester {
 
 
       //Tests
+      //System.out.println("0");
       scores[scoreIndex] += checkValue(sfCat.getBookCount(allBooks.get(0)), 2, part, 0, 1);
+      //System.out.println("1");
       scores[scoreIndex] += checkValue(sfCat.getBookCount(allBooks.get(5)), 3, part, 1, 1);
+      //System.out.println("2");
       scores[scoreIndex] += checkValue(sfCat.getBookCount(allBooks.get(11)), -1, part, 2, 1);
+      //System.out.println("3");
       scores[scoreIndex] += checkValue(allMembers.get(1).checkOutBook(allBooks.get(0), 10, 17, 2019), false, part, 3, 1);
+      //System.out.println("4");
       scores[scoreIndex] += checkValue(sfCat.getBookCount(allBooks.get(0)), 2, part, 4, 1);
+      //System.out.println("5");
       scores[scoreIndex] += checkValue(allMembers.get(3).checkOutBook(allBooks.get(11), 10, 18, 2019), false, part, 5, 1);
+      //System.out.println("6");
       scores[scoreIndex] += checkValue(allMembers.get(3).checkOutBook(allBooks.get(5), 10, 18, 2019), true, part, 6, 1);
+      //System.out.println("7");
       scores[scoreIndex] += checkValue(sfCat.getBookCount(allBooks.get(5)), 2, part, 7, 1);
+      //System.out.println("8");
       scores[scoreIndex] += checkValue(allMembers.get(3).checkOutBook(allBooks.get(4), 10, 19, 2019), true, part, 8, 1);
+      //System.out.println("9");
       scores[scoreIndex] += checkValue(sfCat.getBookCount(allBooks.get(4)), 0, part, 9, 1);
+      //System.out.println("10");
       scores[scoreIndex] += checkValue(allMembers.get(3).checkOutBook(allBooks.get(4), 10, 19, 2019), false, part, 10, 1);
+      //System.out.println("11");
       scores[scoreIndex] += checkValue(sfCat.getBookCount(allBooks.get(4)), 0, part, 11, 1);
+      //System.out.println("12");
     } catch (Exception e) {
       System.out.println("Encountered an error on Part: "+part);
       System.out.println(e.toString());

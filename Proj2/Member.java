@@ -30,6 +30,8 @@ class Member {
     firstName = nameparts[0];
     lastName = nameparts[1];
     this.email = email;
+    checkedOutBooks = new ArrayList<>();
+    checkOutDates = new ArrayList<>();
   }
   
   // getters (given)
@@ -71,8 +73,11 @@ class Member {
   
   public boolean addMemberToLibrary(Library library)
   {
-    // Your code here
-    return false;
+    if (this.library != null){
+      return false;
+    }
+    this.library = library;
+    return true;
   }
   
   /* Fill in this method (Phase D)
@@ -81,7 +86,10 @@ class Member {
    */
   public void goToLibrary()
   {
-    // Your code here
+    if (!atLibrary) {
+      atLibrary = true;
+      this.library.increaseVisitorCount();
+    }
   }
   
   /* Fill in this method (Phase D)
@@ -91,7 +99,10 @@ class Member {
   
   public void leaveLibrary()
   {
-    // Your code here
+    if (atLibrary) {
+      atLibrary = false;
+      this.library.decreaseVisitorCount();
+    }
   }
   
 
@@ -103,7 +114,13 @@ class Member {
   
   public boolean checkOutBook(Book myBook, int month, int day, int year)
   {
-    return true; // replace this line
+    if (atLibrary) {
+      checkedOutBooks.add(myBook);
+      LibraryDate cur = new LibraryDate(month, day, year);
+      checkOutDates.add(cur);
+      return true;
+    }
+    return false;
   }
 
   /* Fill in this method (Phase G)

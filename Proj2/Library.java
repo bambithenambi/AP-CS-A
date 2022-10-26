@@ -22,7 +22,11 @@ class Library {
   // Fill in this constructor (Phase D)
   public Library(String name)
   {
-    // Your code here
+    this.name = name;
+    this.numVisitors = 0;
+    myMembers = new ArrayList<>();
+    memberFees = new ArrayList<>();
+    myCatalogue = new Catalogue();
   }
   
   // getters (given)
@@ -59,7 +63,11 @@ class Library {
    */
   public Member findMemberByEmail(String email)
   {
-    // Your code here
+    for (Member m: myMembers) {
+      if (m.getEmail().equals(email)) {
+        return m;
+      }
+    }
     return null;
   }
   
@@ -72,7 +80,11 @@ class Library {
   
   public boolean addMember(Member newMember)
   {
-    // Your code here
+    if (findMemberByEmail(newMember.getEmail())==null && newMember.addMemberToLibrary(this)) {
+      myMembers.add(newMember);
+      memberFees.add(0.0);
+      return true;
+    }
     return false;
   }
     
@@ -81,7 +93,7 @@ class Library {
    */
   public void increaseVisitorCount()
   {
-    // Your code here
+    numVisitors++;
   }
 
   /* Fill in this method (Phase D)
@@ -89,7 +101,7 @@ class Library {
    */
   public void decreaseVisitorCount()
   {
-    // Your code here
+    numVisitors--;
   }
 
   /* Fill in this method (Phase E)
@@ -99,8 +111,13 @@ class Library {
   
   public Double adjustFee(String email, Double amount)
   {
-    // Your code here
-    return null;
+    Member m = findMemberByEmail(email);
+    if (m==null) {
+      return null;
+    }
+    double Newfee = findFee(email)+amount;
+    memberFees.set(myMembers.indexOf(m), Newfee);
+    return Newfee;
   }
   
   /* Fill in this method (Phase E)
@@ -109,8 +126,11 @@ class Library {
   */
   public Double findFee(String email)
   {
-    // Your code here
-    return null;
+    Member m = findMemberByEmail(email);
+    if (m==null) {
+      return null;
+    }
+    return memberFees.get(myMembers.indexOf(m));
   }
   
   
@@ -118,10 +138,16 @@ class Library {
    * Find all members with a specified last name. 
    * If none, return an empty list.
    */
-  public ArrayList<Member> findMembersByLastName(String lastName)
-  {
-	return null; // replace this line
+  public ArrayList<Member> findMembersByLastName(String lastName) {
+    ArrayList<Member> res = new ArrayList<>();
+    for (Member m: myMembers) {
+      if (m.getLastName().equals(lastName)) {
+        res.add(m);
+      }
+    }
+    return res;
   }
+
   
   // toString() method (given)
   public String toString()
