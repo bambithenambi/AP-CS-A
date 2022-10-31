@@ -9,6 +9,8 @@
  */
 
 import java.util.ArrayList;
+import java.util.Arrays;
+
 
 class Catalogue {
   
@@ -125,9 +127,16 @@ class Catalogue {
    * Return a list of all Books mentioning a specified word in the title.
    * You may assume that keyword is separated by a space from other words.
    */
-  public ArrayList<Book> findKeywordBook(String keyword)
-  {
-    return null; // replace this line
+  public ArrayList<Book> findKeywordBook(String keyword){
+    ArrayList<Book> res = new ArrayList<>();
+    for (int i = 0; i < this.books.size(); i++){
+      String[] titleArr = this.books.get(i).getTitle().split(" ");
+      if(Arrays.asList(titleArr).contains(keyword)){
+        res.add(this.books.get(i));
+      }
+
+    }
+    return res;
   }
   
   // Fill in the toString() method (Phase B)
