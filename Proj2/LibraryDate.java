@@ -16,7 +16,7 @@ import java.time.temporal.ChronoUnit;
 
 class LibraryDate {
   
-  private LocalDate myDate;
+  public LocalDate myDate;
   
   public LibraryDate(int month, int day, int year){
     this.myDate = LocalDate.of(year, month, day);

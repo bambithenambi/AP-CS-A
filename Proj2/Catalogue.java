@@ -76,7 +76,7 @@ class Catalogue {
         }
       }
       else if (category==2){
-        if(b.getAuthor().equals(query)){
+        if(b.getAuthor().equals(query) || b.getAuthor().contains(query)){
           res.add(b);
         }
       }

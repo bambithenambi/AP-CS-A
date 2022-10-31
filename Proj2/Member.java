@@ -112,19 +112,12 @@ class Member {
    * Otherwise return false.
    */
   
-  public boolean checkOutBook(Book myBook, int month, int day, int year)
-  {
-    if (atLibrary) {
-      checkedOutBooks.add(myBook);
-      LibraryDate cur = new LibraryDate(month, day, year);
-      checkOutDates.add(cur);
-      Catalogue myCat = this.library.getCatalogue();
-      if (myCat.getBookCount(myBook)>0) {
-        this.library.getCatalogue().adjustQuantity(myBook, -1);
-      }
-      else {
-        return false;
-      }
+  public boolean checkOutBook(Book myBook, int month, int day, int year){
+    if(memberAtLibrary() && this.library.getCatalogue().getBookCount(myBook) > 0){
+      LibraryDate actualDate = new LibraryDate(month,day,year);
+      this.checkedOutBooks.add(myBook);
+      this.checkOutDates.add(actualDate);
+      this.library.getCatalogue().adjustQuantity(myBook, -1);
       return true;
     }
     return false;
@@ -140,22 +133,24 @@ class Member {
    * It should also update the fee for that user in the Library's 
    * system by the specified amount. If action is unsuccessful, return -1.
    */
-  public double returnBook(Book myBook, int month, int day, int year)
-  {
-    if (atLibrary && getCheckedOutBooks().contains(myBook)) {
-      LibraryDate due = checkOutDates.get(getCheckedOutBooks().indexOf(myBook));
-      double tempFee = (due.daysPast(month, day, year))*myBook.getFee();
-      if (tempFee<0) {
-        tempFee = 0.0;
+  public double returnBook(Book myBook, int month, int day, int year){
+    LibraryDate initial = new LibraryDate(month,day,year);
+    for (int i = 0; i < this.checkedOutBooks.size(); i++){
+      if(memberAtLibrary() && this.checkedOutBooks.get(i).equals(myBook)){
+        this.checkedOutBooks.remove(i);
+        LibraryDate dueDate = this.checkOutDates.remove(i);
+        this.library.getCatalogue().adjustQuantity(myBook, 1);
+        int diff = (int) dueDate.daysPast(month,day,year);
+        if (diff < 7){
+          return 0;
+        } else {
+          double fee = (diff - 7 )* myBook.getFee();
+          this.library.adjustFee(this.email,fee);
+          return fee;
+        }
       }
-      if (library.adjustFee(this.email, tempFee)==null) {
-        return -1.0;
-      }
-      checkOutDates.remove(getCheckedOutBooks().indexOf(myBook));
-      getCheckedOutBooks().remove(myBook);
-      return tempFee;      z
     }
-    return -1.0;
+    return -1;
   }
   
   // given

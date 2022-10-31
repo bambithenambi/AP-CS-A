@@ -21,20 +21,22 @@ class Textbook extends Book {
    */
   public Textbook(String title, String author, String genre, String ISBN)
   {
-    super(null, null, null, null); // Edit this line
-    // Add additional code here
+    super(title, author, genre, ISBN); // Edit this line
+    if (author.contains(",")) {
+      authors = author.split(",");
+    }
   }
   
   // Fill in this setter (Phase H)
   public void setFee(double fee)
   {
-    // Your code here
+    this.fee = fee;
   }
   
   // Fill in getter for author(s) (Phase H)
   public String[] getAuthors()
   {
-    return null; // replace this line
+    return authors;
   }
   
   /* Fill in the toString() method (Phase H)
@@ -44,7 +46,12 @@ class Textbook extends Book {
    */
   public String toString()
   {
-    return null; // replace this line
+    String res = "";
+    res+= "{Title: "+title+"}\n";
+    res+= "Author: "+authors+"\n";
+    res+= "Genre: "+genre+"\n";
+    res+= "ISBN #: "+ISBN+"\n";
+    return res;
   }
 }
 
