@@ -244,7 +244,7 @@ class LibrarySystemTester {
       scores[scoreIndex] += checkValue(sfCat.getBookCount(allBooks.get(0)), 2, part, 4, 1);
       //System.out.println("5");
       scores[scoreIndex] += checkValue(allMembers.get(3).checkOutBook(allBooks.get(11), 10, 18, 2019), false, part, 5, 1);
-      //System.out.println("6");
+      //System.out.println();
       scores[scoreIndex] += checkValue(allMembers.get(3).checkOutBook(allBooks.get(5), 10, 18, 2019), true, part, 6, 1);
       //System.out.println("7");
       scores[scoreIndex] += checkValue(sfCat.getBookCount(allBooks.get(5)), 2, part, 7, 1);

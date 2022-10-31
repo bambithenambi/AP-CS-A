@@ -118,6 +118,13 @@ class Member {
       checkedOutBooks.add(myBook);
       LibraryDate cur = new LibraryDate(month, day, year);
       checkOutDates.add(cur);
+      Catalogue myCat = this.library.getCatalogue();
+      if (myCat.getBookCount(myBook)>0) {
+        this.library.getCatalogue().adjustQuantity(myBook, -1);
+      }
+      else {
+        return false;
+      }
       return true;
     }
     return false;
@@ -135,7 +142,20 @@ class Member {
    */
   public double returnBook(Book myBook, int month, int day, int year)
   {
-    return 0; // replace this line
+    if (atLibrary && getCheckedOutBooks().contains(myBook)) {
+      LibraryDate due = checkOutDates.get(getCheckedOutBooks().indexOf(myBook));
+      double tempFee = (due.daysPast(month, day, year))*myBook.getFee();
+      if (tempFee<0) {
+        tempFee = 0.0;
+      }
+      if (library.adjustFee(this.email, tempFee)==null) {
+        return -1.0;
+      }
+      checkOutDates.remove(getCheckedOutBooks().indexOf(myBook));
+      getCheckedOutBooks().remove(myBook);
+      return tempFee;      z
+    }
+    return -1.0;
   }
   
   // given
