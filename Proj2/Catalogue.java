@@ -3,9 +3,9 @@
  * PROJ 02: OOP ~ L.M.S.
  * SFHS ~ Mrs. Vollucci
  * 
- * Replace with Partner A's Full Name
- * Replace with Partner B's Full Name
- * Replace with Period #
+ * Abhijit Nambiar
+ * Steve Matthew
+ * Period 7
  */
 
 import java.util.ArrayList;
