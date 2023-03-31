@@ -1,5 +1,6 @@
 import java.awt.Color;
-
+import java.util.ArrayList;
+import java.awt.Point;
 import javax.management.loading.PrivateClassLoader;
 
 public class Steganography {
@@ -58,7 +59,7 @@ public class Steganography {
     }
 
     public static boolean canHide(Picture source, Picture secret) {
-        return ((source.getWidth()==secret.getWidth()) && (source.getHeight()==secret.getHeight()));
+        return (!((source.getWidth()<secret.getWidth()) || (source.getHeight()<secret.getHeight())));
     }
 
     public static Picture hidePicture(Picture source, Picture secret) {
@@ -73,6 +74,51 @@ public class Steganography {
         }
         return copy;
     }
+    public static Picture hidePicture(Picture source, Picture secret, int startRow, int startColumn) {
+        Picture copy = new Picture(source);
+        Pixel[][] pixels = copy.getPixels2D();
+        Pixel[][] hidden = secret.getPixels2D();
+        //System.out.println(startRow+" dis startrow");
+        //System.out.println(startColumn+" dis startcol");
+        //System.out.println(hidden[0].length+" dis num hidden cols");
+        for (int r=startRow; r<startRow+hidden.length; r++) {
+            for (int c=startColumn; c<startColumn+hidden[0].length; c++) {
+                //System.out.println(r-startRow);
+                //System.out.println((c-startColumn)+ "this is c-startcol");
+                Color col = hidden[r-startRow][c-startColumn].getColor();
+                setLow(pixels[r][c], col);
+            }
+        }
+        return copy;
+    }
+    public static boolean isSame(Picture pic1, Picture pic2) {
+        if (!((pic1.getWidth()==pic2.getWidth()) && (pic1.getHeight()==pic2.getHeight()))) {
+            return false;
+        }
+        Pixel[][] a = pic1.getPixels2D();
+        Pixel[][] b = pic2.getPixels2D();
+        for (int r=0; r<a.length; r++) {
+            for (int c=0; c<a[0].length; c++) {
+                if (!(a[r][c].getColor().equals(b[r][c].getColor()))) return false;
+            }
+        }
+        return true;
+    }
+    public static ArrayList<Point> findDifferences(Picture pic1, Picture pic2)  {
+        ArrayList<Point> diffs = new ArrayList<Point>();
+        if (isSame(pic1, pic2)) return diffs;
+        if ((!((pic1.getWidth()==pic2.getWidth()) && (pic1.getHeight()==pic2.getHeight())))) return diffs;
+        Pixel[][] a = pic1.getPixels2D();
+        Pixel[][] b = pic2.getPixels2D();
+        for (int r=0; r<a.length; r++) {
+            for (int c=0; c<a[0].length; c++) {
+                if (!(a[r][c].getColor().equals(b[r][c].getColor()))) {
+                    Point p = new Point(r, c);
+                }
+            }
+        }
+        return diffs;
+    }
     public static void main(String[] args) {
         //ACT1
         /* 
@@ -82,13 +128,15 @@ public class Steganography {
         copy2.explore();
         Picture copy3 = revealPicture(copy2);
         copy3.explore();
-        */
+        */ 
         //ACT2
+        /*
         Picture beach = new Picture("beach.jpg");
         Picture arch = new Picture("arch.jpg");
         System.out.println ("beach same size as arch: " + canHide(beach, arch));
         Picture swan = new Picture("swan.jpg"); 
         Picture gorge = new Picture("gorge.jpg"); 
+        swan.explore();
         gorge.explore();      
 
         if (canHide(swan, gorge)) {
@@ -97,6 +145,46 @@ public class Steganography {
             Picture revealed = revealPicture(combined);
             revealed.explore();
         }
+        */
+        //ACT 3
+        /*
+        Picture beach = new Picture("beach.jpg");
+        Picture robot = new Picture("robot.jpg");
+        Picture flower1 = new Picture("flower1.jpg");
+        beach.explore();
 
+        // these lines hide 2 pictures
+        Picture hidden1 = hidePicture(beach, robot, 65, 208);
+        hidden1.explore();
+        Picture hidden2 = hidePicture(hidden1, flower1, 280, 110);
+        hidden2.explore();
+
+        Picture unhidden = revealPicture(hidden2);
+        unhidden.explore();
+        */
+        /*
+        Picture swan = new Picture("swan.jpg");
+        Picture swan2 = new Picture("swan.jpg");
+        System.out.println("swan & swan2 are the same: " + isSame(swan, swan2));
+        swan = testClearLow(swan);
+        System.out.println("swan & swan2 are the same (after clearLow run on swan): " + isSame(swan, swan2));
+        */
+        Picture arch = new Picture("arch.jpg");
+        Picture koala = new Picture("koala.jpg");
+        Picture robot1 = new Picture("robot.jpg");
+        ArrayList<Point> pointList = findDifferences(arch, arch); 
+        System.out.println("PointList after comparing two identical pictures " + "has a size of " + pointList.size());
+        pointList = findDifferences(arch, koala);
+        System.out.println("PointList after comparing two different sized pictures " + "has a size of " + pointList.size());
+        Picture arch2 = hidePicture(arch, robot1, 65, 102);
+        pointList = findDifferences(arch, arch2); 
+        System.out.println("Pointlist after hiding a picture has a size of " + pointList.size());
+
+        Picture arch_none = revealPicture(arch);
+        arch_none.explore();
+        Picture arch_robot = revealPicture(arch2);
+        arch_robot.explore();
+
+        
     }
 }
