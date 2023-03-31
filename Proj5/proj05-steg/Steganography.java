@@ -48,42 +48,55 @@ public class Steganography {
             for (int c=0; c<pixels[0].length; c++) {
                 Color col = source[r][c].getColor();
             
-                //copy.getPixel(c, r).setRed((col.getRed()%4)*64);
-                //copy.getPixel(c, r).setGreen((col.getGreen()%4)*64);
-                //copy.getPixel(c, r).setBlue((col.getBlue()%4)*64);
-                //System.out.println(pixels[r][c].getRed()%64);
-                //System.out.println((col.getRed()%4)*64);
-                pixels[r][c].setRed((col.getRed()%4)*64+pixels[r][c].getRed()%64);
-                pixels[r][c].setGreen((col.getGreen()%4)*64+pixels[r][c].getGreen()%64);
-                pixels[r][c].setBlue((col.getBlue()%4)*64+pixels[r][c].getBlue()%64);
-
+                pixels[r][c].setRed((col.getRed()%4)*64);//+pixels[r][c].getRed()%64);
+                pixels[r][c].setGreen((col.getGreen()%4)*64);//+pixels[r][c].getGreen()%64);
+                pixels[r][c].setBlue((col.getBlue()%4)*64);//+pixels[r][c].getBlue()%64);
             }
         }
         
         return copy;
     }
-    /*
-    public static Picture revealPicture(Picture hidden) {
-		Picture copy = new Picture(hidden);
-		Pixel[][] pixels = copy.getPixels2D();
-		Pixel[][] source = hidden.getPixels2D();
-		for (int r = 0; r < pixels.length; r++) {
-			for (int c = 0; c < pixels[0].length; c++) {
-				Color col = source[r][c].getColor();
-				pixels[r][c].setRed(pixels[r][c].getRed() % 64 + col.getRed() % 4 * 64);
-				pixels[r][c].setBlue(pixels[r][c].getBlue() % 64 + col.getBlue() % 4 * 64);
-				pixels[r][c].setGreen(pixels[r][c].getGreen() % 64 + col.getGreen() % 4 * 64);
-			}
-		}
-		return copy;
-	}
-    */
+
+    public static boolean canHide(Picture source, Picture secret) {
+        return ((source.getWidth()==secret.getWidth()) && (source.getHeight()==secret.getHeight()));
+    }
+
+    public static Picture hidePicture(Picture source, Picture secret) {
+        Picture copy = new Picture(source);
+        Pixel[][] pixels = copy.getPixels2D();
+        Pixel[][] hidden = secret.getPixels2D();
+        for (int r=0; r<pixels.length; r++) {
+            for (int c=0; c<pixels[0].length; c++) {
+                Color col = hidden[r][c].getColor();
+                setLow(pixels[r][c], col);
+            }
+        }
+        return copy;
+    }
     public static void main(String[] args) {
+        //ACT1
+        /* 
         Picture beach2 = new Picture ("beach.jpg");
         beach2.explore();
         Picture copy2 = testSetLow(beach2, Color.PINK);
         copy2.explore();
         Picture copy3 = revealPicture(copy2);
         copy3.explore();
+        */
+        //ACT2
+        Picture beach = new Picture("beach.jpg");
+        Picture arch = new Picture("arch.jpg");
+        System.out.println ("beach same size as arch: " + canHide(beach, arch));
+        Picture swan = new Picture("swan.jpg"); 
+        Picture gorge = new Picture("gorge.jpg"); 
+        gorge.explore();      
+
+        if (canHide(swan, gorge)) {
+            Picture combined = hidePicture(swan, gorge); 
+            combined.explore();
+            Picture revealed = revealPicture(combined);
+            revealed.explore();
+        }
+
     }
 }
