@@ -38,6 +38,7 @@ public class Steganography {
         }
         return p;
     }
+    
     public static Picture revealPicture(Picture hidden) {
         Picture copy = new Picture(hidden);
         Pixel[][] pixels = copy.getPixels2D();
@@ -61,11 +62,26 @@ public class Steganography {
         
         return copy;
     }
-
+    /*
+    public static Picture revealPicture(Picture hidden) {
+		Picture copy = new Picture(hidden);
+		Pixel[][] pixels = copy.getPixels2D();
+		Pixel[][] source = hidden.getPixels2D();
+		for (int r = 0; r < pixels.length; r++) {
+			for (int c = 0; c < pixels[0].length; c++) {
+				Color col = source[r][c].getColor();
+				pixels[r][c].setRed(pixels[r][c].getRed() % 64 + col.getRed() % 4 * 64);
+				pixels[r][c].setBlue(pixels[r][c].getBlue() % 64 + col.getBlue() % 4 * 64);
+				pixels[r][c].setGreen(pixels[r][c].getGreen() % 64 + col.getGreen() % 4 * 64);
+			}
+		}
+		return copy;
+	}
+    */
     public static void main(String[] args) {
         Picture beach2 = new Picture ("beach.jpg");
         beach2.explore();
-        Picture copy2 = testClearLow(beach2);
+        Picture copy2 = testSetLow(beach2, Color.PINK);
         copy2.explore();
         Picture copy3 = revealPicture(copy2);
         copy3.explore();
