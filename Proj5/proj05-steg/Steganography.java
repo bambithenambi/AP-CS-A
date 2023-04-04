@@ -132,10 +132,10 @@ public class Steganography {
             if ((int)p.getX()>maxCol) maxCol = (int)p.getX();
             if ((int)p.getY()>maxRow) maxRow = (int)p.getY();
         }
-        System.out.println("minRow: "+minRow);
+        /*System.out.println("minRow: "+minRow);
         System.out.println("maxRow: "+maxRow);
         System.out.println("minCol: "+minCol);
-        System.out.println("maxCol: "+maxCol);
+        System.out.println("maxCol: "+maxCol);*/
         for(int i=minCol; i<=maxCol; i++) {
             pixar[i][minRow].setColor(Color.RED);
             pixar[i][maxRow].setColor(Color.RED);
