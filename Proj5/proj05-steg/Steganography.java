@@ -114,10 +114,37 @@ public class Steganography {
             for (int c=0; c<a[0].length; c++) {
                 if (!(a[r][c].getColor().equals(b[r][c].getColor()))) {
                     Point p = new Point(r, c);
+                    diffs.add(p);
                 }
             }
         }
         return diffs;
+    }
+    public static Picture showDifferentArea(Picture pic, ArrayList<Point> pointList) {
+        Picture copy = new Picture(pic);
+        Pixel[][] pixar = copy.getPixels2D();
+        int minRow = pic.getHeight()-1;
+        int minCol = pic.getWidth()-1;
+        int maxRow=0, maxCol=0;
+        for(Point p: pointList) {
+            if ((int)p.getX()<minCol) minCol = (int)p.getX();
+            if ((int)p.getY()<minRow) minRow = (int)p.getY();
+            if ((int)p.getX()>maxCol) maxCol = (int)p.getX();
+            if ((int)p.getY()>maxRow) maxRow = (int)p.getY();
+        }
+        System.out.println("minRow: "+minRow);
+        System.out.println("maxRow: "+maxRow);
+        System.out.println("minCol: "+minCol);
+        System.out.println("maxCol: "+maxCol);
+        for(int i=minCol; i<=maxCol; i++) {
+            pixar[i][minRow].setColor(Color.RED);
+            pixar[i][maxRow].setColor(Color.RED);
+        }
+        for(int i=minRow; i<=maxRow; i++) {
+            pixar[minCol][i].setColor(Color.RED);
+            pixar[maxCol][i].setColor(Color.RED);
+        }
+        return copy;
     }
     public static void main(String[] args) {
         //ACT1
@@ -169,6 +196,7 @@ public class Steganography {
         swan = testClearLow(swan);
         System.out.println("swan & swan2 are the same (after clearLow run on swan): " + isSame(swan, swan2));
         */
+        /*
         Picture arch = new Picture("arch.jpg");
         Picture koala = new Picture("koala.jpg");
         Picture robot1 = new Picture("robot.jpg");
@@ -184,7 +212,77 @@ public class Steganography {
         arch_none.explore();
         Picture arch_robot = revealPicture(arch2);
         arch_robot.explore();
+        */
+        /*
+        Picture hall = new Picture("femaleLionAndHall.jpg"); 
+        Picture robot2 = new Picture("robot.jpg");
+        Picture flower2 = new Picture("flower1.jpg");
+        // hide pictures
+        Picture hall2 = hidePicture(hall, robot2, 50, 300); 
+        Picture hall3 = hidePicture(hall2, flower2, 115, 275); 
+        //hall3.explore();
+        if(!isSame(hall, hall3)) {
+        Picture hall4 = showDifferentArea(hall, findDifferences(hall, hall3));
+        hall4.show();
+            Picture unhiddenHall3 = revealPicture(hall3); 
+            unhiddenHall3.show();
+        }
+        */
+        // Activity 3
+        // 4 picture windows should open
+        // 5 print statements should show in Terminal
+                        
+        // Q1: hidePicture - version 2!
+        Picture beach = new Picture("beach.jpg");
+        Picture robot = new Picture("robot.jpg");
+        Picture flower1 = new Picture("flower1.jpg");
+        //beach.explore();
 
-        
+        // these lines hide 2 pictures
+        Picture hidden1 = hidePicture(beach, robot, 65, 208);
+        Picture hidden2 = hidePicture(hidden1, flower1, 280, 110);
+        //hidden2.explore();
+
+        Picture unhidden = revealPicture(hidden2);
+        unhidden.explore();
+
+        //Q2: isSame
+        Picture swan = new Picture("swan.jpg");
+        Picture swan2 = new Picture("swan.jpg");
+        System.out.println("1) swan & swan2 are the same: " + isSame(swan, swan2));
+        swan = testClearLow(swan);
+        System.out.println("2) swan & swan2 are the same (after clearLow run on swan): " + isSame(swan, swan2));
+                
+        // Q3: findDifferences
+        Picture arch = new Picture("arch.jpg");
+        Picture koala = new Picture("koala.jpg");
+        Picture robot1 = new Picture("robot.jpg");
+        ArrayList<Point> pointList = findDifferences(arch, arch); 
+        System.out.println("3) PointList after comparing two identical pictures " + "has a size of " + pointList.size());
+        pointList = findDifferences(arch, koala);
+        System.out.println("4) PointList after comparing two different sized pictures " + "has a size of " + pointList.size());
+        Picture arch2 = hidePicture(arch, robot1, 65, 102);
+        pointList = findDifferences(arch, arch2); 
+        System.out.println("5) Pointlist after hiding a picture has a size of " + pointList.size());
+
+        Picture arch_none = revealPicture(arch);
+        //arch_none.explore();
+        Picture arch_robot = revealPicture(arch2);
+        arch_robot.explore();
+
+        // Q4: showDifferentArea
+        Picture hall = new Picture("femaleLionAndHall.jpg"); 
+        Picture robot2 = new Picture("robot.jpg");
+        Picture flower2 = new Picture("flower1.jpg");
+        // hide pictures
+        Picture hall2 = hidePicture(hall, robot2, 50, 300); 
+        Picture hall3 = hidePicture(hall2, flower2, 115, 275); 
+        //hall3.explore();
+        if(!isSame(hall, hall3)) {
+        Picture hall4 = showDifferentArea(hall, findDifferences(hall, hall3)); 
+            hall4.show();
+            Picture unhiddenHall3 = revealPicture(hall3); 
+            unhiddenHall3.show();
+        }        
     }
 }
